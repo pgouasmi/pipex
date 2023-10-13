@@ -6,7 +6,7 @@
 /*   By: pgouasmi <pgouasmi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/10 10:50:57 by pgouasmi          #+#    #+#             */
-/*   Updated: 2023/10/13 18:25:55 by pgouasmi         ###   ########.fr       */
+/*   Updated: 2023/10/13 18:36:48 by pgouasmi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,5 +83,8 @@ void	pipex(t_arg *args)
 	waitpid(child2, NULL, 0);
 	close(args->fd_infile);
 	close(args->fd_outfile);
+	close(0);
+	close(1);
+	close(2);
 	return ;
 }

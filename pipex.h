@@ -6,7 +6,7 @@
 /*   By: pgouasmi <pgouasmi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 10:52:08 by pgouasmi          #+#    #+#             */
-/*   Updated: 2023/10/13 17:09:47 by pgouasmi         ###   ########.fr       */
+/*   Updated: 2023/10/13 19:43:30 by pgouasmi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef struct s_arg
 }		t_arg;
 
 int			ft_arg_manager(char *envp, char **argv, t_arg *args);
+int			fix_paths(char *str, t_arg *args);
 int			parse_arg(char **argv, t_arg *args);
 void		free_struct(t_arg *args);
 void		free_arr(char **arr);
