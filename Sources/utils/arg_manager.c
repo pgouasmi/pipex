@@ -6,7 +6,7 @@
 /*   By: pgouasmi <pgouasmi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 17:27:29 by pgouasmi          #+#    #+#             */
-/*   Updated: 2023/11/02 18:13:10 by pgouasmi         ###   ########.fr       */
+/*   Updated: 2023/11/02 18:48:57 by pgouasmi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	fd_handler(t_arg *args, int type)
 	}
 	else
 	{
-		if (access(args->infile, F_OK))
+		if (access(args->outfile, F_OK))
 			return (0);
 		if (access(args->outfile, W_OK))
 			return (1);
