@@ -6,59 +6,85 @@
 #    By: pgouasmi <pgouasmi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/25 10:48:24 by pgouasmi          #+#    #+#              #
-#    Updated: 2023/10/13 19:48:36 by pgouasmi         ###   ########.fr        #
+#    Updated: 2023/11/02 18:18:29 by pgouasmi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
+#COLOR
+_GREEN = \033[92m
+_YELLOW = \033[33m
+_RED = \033[31m
+
+#POLICE
+_END = \033[0m
+_BOLD = \033[1m
+
 NAME = pipex
+CFLAGS = -Wall -Wextra -Werror -IIncludes
+RM = @rm -rf
+CC = @cc
+DIR = @mkdir -p
+PRINT = @echo
+HEADER = Includes/pipex.h
+LIBFT = Libft/libft.a
+MAKE_LIBFT = @make -C Libft
+CLEAN_LIBFT = @make clean -C Libft
+FCLEAN_LIBFT = @make fclean -C Libft
+NORM = @norminette | awk '$$NF!="OK!" {print "$(_RED)" $$0 "\033[0;0m"}'
+FILES = pipex\
+		utils/arg_manager\
+		utils/core\
+		utils/free\
+		utils/get_paths\
+		utils/utils
+SRCS = $(addsuffix .c, $(addprefix Sources/, $(FILES)))
+OBJS = $(addsuffix .o, $(addprefix Objects/, $(FILES)))
 
-LIBFT_PATH	=	./includes/
+$(NAME): $(OBJS) $(LIBFT)
+	$(PRINT) "\n${_BOLD}Waiting for norminette...${_END}"
+	$(NORM)
+	$(PRINT) "${_BOLD}Norminette done.${_END}"
+	$(PRINT) "\n${_YELLOW}Making $(NAME)...${_END}"
+	$(CC) $(OBJS) -o $(NAME) $(LIBFT)
+	$(PRINT) "${_BOLD}${_GREEN}$(NAME) done.\a${_END}"
 
-LIBFT_FILE	=	libft.a
+$(LIBFT): force
+	$(PRINT) "\n${_YELLOW}Checking Libft...${_END}"
+	$(MAKE_LIBFT)
 
-LIBFT_LIB	=	$(addprefix $(LIBFT_PATH), $(LIBFT_FILE))
+Objects/%.o: Sources/%.c Makefile $(HEADER)
+	$(DIR) Objects
+	$(DIR) Objects/utils
+	$(PRINT) "Compiling ${_BOLD}$<$(_END)..."
+	$(CC) -c $(CFLAGS) $< -o $@
 
-# OBJS = ${SRCS:.c=.o}
-
-HEADER = pipex.h
-
-CC = cc
-
-FLAG = -Wall -Wextra -Werror -ggdb3
-
-C_FILE		=	pipex.c					\
-				./utils/arg_manager.c	\
-				./utils/get_paths.c		\
-				./utils/free.c			\
-				./utils/utils.c			\
-				./utils/core.c			\
-
-SRC			=	$(addprefix $(SRC_DIR),$(C_FILE))
-
-OBJ			=	$(SRC:.c=.o)
-
-.c.o:
-	$(CC) $(FLAG) -c $< -o $@
-
-all:	$(NAME)
-
-lib:	
-	@make -C $(LIBFT_PATH)
-
-%.o:	%.c $(HEADER) Makefile
-			$(CC) $(FLAG) -I . -c $< -o $@
-
-$(NAME): lib $(OBJ)
-	$(CC) $(OBJ) $(OBJS) $(LIBFT_LIB) -o $(NAME)
+all: $(NAME)
 
 clean:
-	@make clean -C $(LIBFT_PATH)
-	@rm -f $(OBJ) $(OBJS)
+	$(CLEAN_LIBFT)
+	$(PRINT) "\n${_BOLD}Cleaning Objects...${_END}"
+	$(RM) $(OBJS)
+	$(PRINT) "${_BOLD}${_GREEN}Objects cleaned.\a${_END}"
 
-fclean: clean
-	@rm -f $(NAME)
-	@make fclean -C $(LIBFT_PATH)
+fclean:
+	$(FCLEAN_LIBFT)
+	$(PRINT) "\n${_BOLD}Cleaning Objects...${_END}"
+	$(RM) $(OBJS)
+	$(PRINT) "${_RED}Deleting $(NAME)...${_END}"
+	$(RM) $(NAME)
+	$(PRINT) "${_RED}Deleting Objects directory...${_END}"
+	$(RM) Objects
+	$(PRINT) "${_GREEN}Objects cleaned.${_END}"
+	$(PRINT) "${_GREEN}Objects directory deleted.${_END}"
+	$(PRINT) "${_GREEN}$(NAME) deleted.\a\n${_END}"
 
-re :
-	make fclean
-	make
+re: fclean all
+
+norminette:
+	$(PRINT) "\n${_BOLD}Waiting for norminette...${_END}"
+	$(NORM)
+	$(PRINT) "${_BOLD}Norminette done.${_END}"
+
+force:
+
+.PHONY: all clean fclean re norminette force
